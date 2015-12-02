@@ -12855,8 +12855,9 @@ static int ZEND_FASTCALL  ZEND_PRE_INC_SPEC_VAR_HANDLER(ZEND_OPCODE_HANDLER_ARGS
 	}
 	if (IS_VAR == IS_VAR && UNEXPECTED(*var_ptr == &EG(error_zval))) {
 		if (RETURN_VALUE_USED(opline)) {
-			PZVAL_LOCK(&EG(uninitialized_zval));
-			EX_T(opline->result.var).var.ptr = &EG(uninitialized_zval);
+			zval *retval = &EX_T(opline->result.var).tmp_var;
+			ZVAL_COPY_VALUE(retval, &EG(uninitialized_zval));
+			zendi_zval_copy_ctor(*retval);
 		}
 		if (free_op1.var) {zval_ptr_dtor_nogc(&free_op1.var);};
 		CHECK_EXCEPTION();
@@ -12879,8 +12880,9 @@ static int ZEND_FASTCALL  ZEND_PRE_INC_SPEC_VAR_HANDLER(ZEND_OPCODE_HANDLER_ARGS
 	}
 
 	if (RETURN_VALUE_USED(opline)) {
-		PZVAL_LOCK(*var_ptr);
-		EX_T(opline->result.var).var.ptr = *var_ptr;
+		zval *retval = &EX_T(opline->result.var).tmp_var;
+		ZVAL_COPY_VALUE(retval, *var_ptr);
+		zendi_zval_copy_ctor(*retval);
 	}
 
 	if (free_op1.var) {zval_ptr_dtor_nogc(&free_op1.var);};
@@ -30478,8 +30480,9 @@ static int ZEND_FASTCALL  ZEND_PRE_INC_SPEC_CV_HANDLER(ZEND_OPCODE_HANDLER_ARGS)
 	}
 	if (IS_CV == IS_VAR && UNEXPECTED(*var_ptr == &EG(error_zval))) {
 		if (RETURN_VALUE_USED(opline)) {
-			PZVAL_LOCK(&EG(uninitialized_zval));
-			EX_T(opline->result.var).var.ptr = &EG(uninitialized_zval);
+			zval *retval = &EX_T(opline->result.var).tmp_var;
+			ZVAL_COPY_VALUE(retval, &EG(uninitialized_zval));
+			zendi_zval_copy_ctor(*retval);
 		}
 
 		CHECK_EXCEPTION();
@@ -30502,8 +30505,9 @@ static int ZEND_FASTCALL  ZEND_PRE_INC_SPEC_CV_HANDLER(ZEND_OPCODE_HANDLER_ARGS)
 	}
 
 	if (RETURN_VALUE_USED(opline)) {
-		PZVAL_LOCK(*var_ptr);
-		EX_T(opline->result.var).var.ptr = *var_ptr;
+		zval *retval = &EX_T(opline->result.var).tmp_var;
+		ZVAL_COPY_VALUE(retval, *var_ptr);
+		zendi_zval_copy_ctor(*retval);
 	}
 
 	CHECK_EXCEPTION();
